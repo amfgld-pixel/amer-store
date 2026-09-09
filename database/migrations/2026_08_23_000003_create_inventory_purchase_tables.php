@@ -101,7 +101,10 @@ return new class extends Migration {
             $table->foreignId('created_by')->constrained('users')->restrictOnDelete();
             $table->timestamp('occurred_at');
             $table->timestamps();
-            $table->index(['product_variant_id', 'inventory_location_id', 'occurred_at']);
+            $table->index(
+                ['product_variant_id', 'inventory_location_id', 'occurred_at'],
+                'stock_move_variant_location_date_idx'
+            );
         });
     }
 
