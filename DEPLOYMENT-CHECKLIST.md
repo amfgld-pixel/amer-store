@@ -1,0 +1,12 @@
+# AMER Production Checklist
+- Set APP_ENV=production and APP_DEBUG=false.
+- Use HTTPS and secure cookies.
+- Configure PostgreSQL, queue worker, scheduler and persistent cache.
+- Configure object storage and off-site encrypted backups.
+- Run migrations with `--force` only after a verified backup.
+- Run `php artisan config:cache`, `route:cache`, `view:cache` and `event:cache`.
+- Run `npm.cmd ci && npm.cmd run build`.
+- Schedule `php artisan schedule:run` every minute and run queue workers under a supervisor.
+- Test payment/courier sandbox callbacks before production credentials.
+- Change the initial Super Admin password and enable least-privilege roles.
+- Verify `/health/ready`, storefront, checkout, POS, backup restore and rollback.

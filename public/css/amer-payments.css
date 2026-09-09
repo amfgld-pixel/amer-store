@@ -1,0 +1,1 @@
+.payment-options{max-width:720px;margin:auto;display:grid;gap:12px}.payment-options label{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;padding:20px;border:1px solid #e7e3da;background:#fff}.payment-options input{grid-row:1/3}.payment-options span{color:#706d67}.payment-options button{margin-top:14px}

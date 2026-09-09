@@ -1,0 +1,4 @@
+<?php
+namespace App\Models;
+use Illuminate\Database\Eloquent\Model;use Illuminate\Database\Eloquent\SoftDeletes;
+class Product extends Model {use SoftDeletes;protected $fillable=['brand_id','name','name_bn','slug','product_type','short_description','short_description_bn','description','description_bn','status','is_featured','sort_order','meta_title','meta_description'];protected function casts():array{return ['is_featured'=>'boolean'];}public function brand(){return $this->belongsTo(Brand::class);}public function categories(){return $this->belongsToMany(Category::class);}public function variants(){return $this->hasMany(ProductVariant::class)->orderBy('sort_order');}public function images(){return $this->hasMany(ProductImage::class)->orderBy('sort_order');}public function wishlists(){return $this->hasMany(Wishlist::class);}}

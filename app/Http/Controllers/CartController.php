@@ -1,0 +1,4 @@
+<?php
+namespace App\Http\Controllers;
+use App\Models\ProductVariant;use App\Services\CartService;use Illuminate\Http\Request;
+class CartController extends Controller {public function index(CartService $cart){return view('storefront.cart',['items'=>$cart->items(),'subtotal'=>$cart->subtotal()]);}public function store(Request $r,ProductVariant $variant,CartService $cart){$v=$r->validate(['quantity'=>['required','integer','min:1','max:99']]);$cart->add($variant,(int)$v['quantity']);return redirect()->route('cart.index')->with('status','Added to your bag.');}public function update(Request $r,ProductVariant $variant,CartService $cart){$v=$r->validate(['quantity'=>['required','integer','min:0','max:99']]);$cart->update($variant,(int)$v['quantity']);return back();}public function destroy(ProductVariant $variant,CartService $cart){$cart->remove($variant);return back();}}

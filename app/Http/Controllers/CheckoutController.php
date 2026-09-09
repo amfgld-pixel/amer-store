@@ -1,0 +1,4 @@
+<?php
+namespace App\Http\Controllers;
+use App\Http\Requests\CheckoutRequest;use App\Models\Order;use App\Services\CartService;use App\Services\CheckoutService;
+class CheckoutController extends Controller {public function create(CartService $cart){if(!$cart->items())return redirect()->route('cart.index');return view('storefront.checkout',['items'=>$cart->items(),'subtotal'=>$cart->subtotal()]);}public function store(CheckoutRequest $r,CartService $cart,CheckoutService $service){$order=$service->place($r->validated(),$cart->items(),$r->user()?->id,$r->ip());$cart->clear();$r->session()->put('last_order_uuid',$order->uuid);return redirect()->route('payment.show',$order->uuid);}public function success(string $uuid){$order=Order::where('uuid',$uuid)->firstOrFail();abort_unless(session('last_order_uuid')===$uuid||auth()->id()===$order->user_id,403);return view('storefront.order-success',compact('order'));}}

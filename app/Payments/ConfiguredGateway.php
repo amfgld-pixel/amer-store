@@ -1,0 +1,3 @@
+<?php
+namespace App\Payments;use App\Contracts\PaymentGateway;use App\Models\Order;use App\Models\PaymentTransaction;use RuntimeException;
+class ConfiguredGateway implements PaymentGateway{public function __construct(private string $name){}public function initiate(Order $order,PaymentTransaction $transaction):array{if(!config("amer_payments.{$this->name}.enabled"))throw new RuntimeException(strtoupper($this->name).' merchant gateway is not configured.');throw new RuntimeException(strtoupper($this->name).' API transport requires your approved merchant endpoint specification.');}public function verify(array $payload,PaymentTransaction $transaction):bool{return false;}}

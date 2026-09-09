@@ -1,0 +1,3 @@
+<?php
+namespace Tests\Feature;use App\Services\ShippingRateService;use Database\Seeders\AmerShippingSeeder;use Illuminate\Foundation\Testing\RefreshDatabase;use Tests\TestCase;
+class Pack007ShippingTest extends TestCase{use RefreshDatabase;public function test_dhaka_and_outside_rates():void{$this->seed();$this->seed(AmerShippingSeeder::class);$s=app(ShippingRateService::class);$this->assertSame(80.0,$s->quote('BD','Dhaka')['amount']);$this->assertSame(130.0,$s->quote('BD','Chattogram')['amount']);}public function test_international_requires_confirmation():void{$this->seed();$q=app(ShippingRateService::class)->quote('US','New York');$this->assertTrue($q['requires_confirmation']);}}

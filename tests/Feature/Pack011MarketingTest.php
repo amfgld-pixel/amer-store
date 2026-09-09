@@ -1,0 +1,3 @@
+<?php
+namespace Tests\Feature;use Illuminate\Foundation\Testing\RefreshDatabase;use Tests\TestCase;
+class Pack011MarketingTest extends TestCase{use RefreshDatabase;public function test_sitemap_and_robots_are_public():void{$this->seed();$this->get('/sitemap.xml')->assertOk()->assertHeader('Content-Type','application/xml');$this->get('/robots.txt')->assertOk()->assertSee('Disallow: /admin');}public function test_newsletter_subscribe_is_idempotent():void{$this->seed();$this->post('/newsletter',['email'=>'buyer@example.com']);$this->post('/newsletter',['email'=>'buyer@example.com']);$this->assertDatabaseCount('newsletter_subscribers',1);}}
