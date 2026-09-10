@@ -3,7 +3,7 @@
 @section('title', 'AMER — Modern Luxury from Bangladesh')
 
 @section('content')
-    @if ($promotionBanner ?? null)
+    @if ($promotionBanner)
         <div class="promotion-hero-banner">{{ $promotionBanner }}</div>
     @endif
 
@@ -19,7 +19,7 @@
                             @if ($slide->image_path_tablet)
                                 <source media="(max-width: 900px)" srcset="{{ asset('storage/'.$slide->image_path_tablet) }}">
                             @endif
-                            <img src="{{ asset('storage/'.$slide->image_path) }}" alt="{{ $slide->title }}" style="object-fit:{{ ($slide->image_fit ?? 'cover') === 'cover' ? 'cover' : 'contain' }};object-position:{{ $slide->image_focal_x ?? 50 }}% {{ $slide->image_focal_y ?? 50 }}%">
+                            <img src="{{ asset('storage/'.$slide->image_path) }}" alt="{{ $slide->title ?: 'AMER homepage slide' }}" style="object-fit:{{ ($slide->image_fit ?? 'cover') === 'cover' ? 'cover' : 'contain' }};object-position:{{ $slide->image_focal_x ?? 50 }}% {{ $slide->image_focal_y ?? 50 }}%">
                         </picture>
                     @elseif ($slide->video_path || $slide->video_url)
                         <video autoplay muted loop playsinline>
@@ -30,7 +30,9 @@
                     <div class="cms-slide-overlay"></div>
                     <div class="cms-slide-copy">
                         <p class="eyebrow">AMER</p>
-                        <h1>{!! nl2br(e($slide->title)) !!}</h1>
+                        @if ($slide->title)
+                            <h1>{!! nl2br(e($slide->title)) !!}</h1>
+                        @endif
                         @if ($slide->subtitle)
                             <p class="slide-subtitle">{!! nl2br(e($slide->subtitle)) !!}</p>
                         @endif

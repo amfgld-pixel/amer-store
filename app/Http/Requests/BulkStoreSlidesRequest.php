@@ -19,7 +19,7 @@ class BulkStoreSlidesRequest extends FormRequest
             'images' => ['required', 'array', 'min:1', 'max:20'],
             'images.*' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:10240'],
             'titles' => ['required', 'array'],
-            'titles.*' => ['required', 'string', 'max:500'],
+            'titles.*' => ['nullable', 'string', 'max:500'],
             'subtitles' => ['nullable', 'array'],
             'subtitles.*' => ['nullable', 'string', 'max:1000'],
             'button_texts' => ['nullable', 'array'],

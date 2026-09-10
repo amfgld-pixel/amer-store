@@ -6,10 +6,10 @@
     <section class="slide-controls">
         <h3>Content & media</h3>
         <div class="admin-grid">
-            <label class="wide">Title (press Enter for a new line)
-                <textarea name="title" rows="2" required data-preview-title>{{ old('title', $s?->title) }}</textarea>
+            <label class="wide">Title (optional — press Enter for a new line)
+                <textarea name="title" rows="2" data-preview-title>{{ old('title', $s?->title) }}</textarea>
             </label>
-            <label class="wide">Subtitle (multiple lines supported)
+            <label class="wide">Subtitle (optional — multiple lines supported)
                 <textarea name="subtitle" rows="2" data-preview-subtitle>{{ old('subtitle', $s?->subtitle) }}</textarea>
             </label>
             <label>Slide picture<input type="file" name="image" accept="image/jpeg,image/png,image/webp" data-preview-image></label>

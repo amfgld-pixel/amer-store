@@ -64,7 +64,7 @@ class StoreDesignController extends Controller
                     array_push($createdPaths, $responsive['image_path'], $responsive['image_path_tablet'], $responsive['image_path_mobile']);
 
                     StoreSlide::query()->create(array_merge($responsive, [
-                        'title' => $data['titles'][$index],
+                        'title' => $data['titles'][$index] ?? null,
                         'subtitle' => $data['subtitles'][$index] ?? null,
                         'button_text' => $data['button_texts'][$index] ?? null,
                         'button_url' => $data['button_urls'][$index] ?? null,

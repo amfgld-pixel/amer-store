@@ -19,7 +19,7 @@ class StoreSlideRequest extends FormRequest
             : ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'];
 
         return [
-            'title' => ['required', 'string', 'max:500'],
+            'title' => ['nullable', 'string', 'max:500'],
             'subtitle' => ['nullable', 'string', 'max:1000'],
             'image' => $mediaRules,
             'video' => $this->isMethod('post')

@@ -48,8 +48,8 @@
         <div class="bulk-picture-controls">
             <div class="bulk-picture-heading"><h3 data-picture-name></h3><button type="button" class="danger" data-remove-picture>Remove Picture</button></div>
             <p class="picture-measurement" data-picture-measurement></p>
-            <label>Title<textarea rows="2" data-field="titles" required></textarea></label>
-            <label>Subtitle<textarea rows="2" data-field="subtitles"></textarea></label>
+            <label>Title (optional)<textarea rows="2" data-field="titles"></textarea></label>
+            <label>Subtitle (optional)<textarea rows="2" data-field="subtitles"></textarea></label>
             <div class="admin-grid">
                 <label>Button Text<input data-field="button_texts"></label>
                 <label>Button URL<input data-field="button_urls"></label>

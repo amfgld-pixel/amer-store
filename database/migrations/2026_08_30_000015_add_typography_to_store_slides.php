@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('store_slides', function (Blueprint $table) {
-            $table->text('title')->change();
+            $table->text('title')->nullable()->change();
             $table->text('subtitle')->nullable()->change();
             $table->string('title_font')->default('Manrope');
             $table->unsignedSmallInteger('title_size_desktop')->default(72);
