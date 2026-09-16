@@ -24,7 +24,7 @@
                             @if ($slide->image_path_tablet)
                                 <source media="(max-width: 900px)" srcset="{{ $slideDisk->url($slide->image_path_tablet) }}">
                             @endif
-                            <img src="{{ $slideDisk->url($slide->image_path) }}" alt="{{ $slide->title ?: 'Homepage slide' }}" style="object-fit:{{ ($slide->image_fit ?? 'cover') === 'cover' ? 'cover' : 'contain' }};object-position:{{ $slide->image_focal_x ?? 50 }}% {{ $slide->image_focal_y ?? 50 }}%">
+                            <img src="{{ $slideDisk->url($slide->image_path) }}" alt="{{ $slide->title ?: 'Homepage slide' }}" style="object-fit:{{ ($slide->image_fit ?? 'contain') === 'cover' ? 'cover' : 'contain' }};object-position:{{ $slide->image_focal_x ?? 50 }}% {{ $slide->image_focal_y ?? 50 }}%">
                         </picture>
                     @elseif ($slide->video_path || $slide->video_url)
                         <video autoplay muted loop playsinline>

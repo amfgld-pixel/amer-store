@@ -14,7 +14,7 @@ class SlideImageProcessor
         'mobile' => [750, 900],
     ];
 
-    public function process(UploadedFile $file, string $fit = 'cover', int $focalX = 50, int $focalY = 50): array
+    public function process(UploadedFile $file, string $fit = 'contain', int $focalX = 50, int $focalY = 50): array
     {
         if (! function_exists('imagecreatefromstring') || ! function_exists('imagewebp')) {
             throw new RuntimeException('PHP GD with WebP support is required for automatic slide resizing.');

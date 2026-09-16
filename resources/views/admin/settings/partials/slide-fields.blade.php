@@ -19,7 +19,7 @@
                 <textarea name="subtitle" rows="2" data-preview-subtitle>{{ old('subtitle', $s?->subtitle) }}</textarea>
             </label>
             <label>Slide picture<input type="file" name="image" accept="image/jpeg,image/png,image/webp" data-preview-image></label>
-            <label>Picture Fit<select name="image_fit"><option value="cover" @selected(old('image_fit', $s?->image_fit ?? 'cover') === 'cover')>Auto Cover</option><option value="contain" @selected(old('image_fit', $s?->image_fit) === 'contain')>Contain Full Picture</option><option value="original" @selected(old('image_fit', $s?->image_fit) === 'original')>Original Proportion</option></select></label>
+            <label>Picture Fit<select name="image_fit"><option value="contain" @selected(old('image_fit', $s?->image_fit ?? 'contain') === 'contain')>Contain Full Picture — No Crop</option><option value="cover" @selected(old('image_fit', $s?->image_fit) === 'cover')>Auto Cover — Fill & Crop</option><option value="original" @selected(old('image_fit', $s?->image_fit) === 'original')>Original Proportion — No Enlargement</option></select></label>
             <label>Horizontal Focus (%)<input type="range" name="image_focal_x" min="0" max="100" value="{{ old('image_focal_x', $s?->image_focal_x ?? 50) }}"></label>
             <label>Vertical Focus (%)<input type="range" name="image_focal_y" min="0" max="100" value="{{ old('image_focal_y', $s?->image_focal_y ?? 50) }}"></label>
             <label>Upload video<input type="file" name="video" accept="video/mp4,video/webm" data-preview-video></label>
@@ -64,7 +64,7 @@
         <h3>Live Preview <small>(desktop preview)</small></h3>
         <div class="slide-live-preview position-{{ old('text_position', $s?->text_position ?? 'middle') }}" data-slide-preview data-existing-image="{{ $existingImageUrl }}" data-existing-video="{{ $existingVideoUrl }}">
             <div class="preview-media" data-preview-media></div><div class="preview-overlay" data-preview-overlay></div>
-            <div class="preview-copy"><h2 data-live-title>{{ old('title', $s?->title ?? 'Your slide title') }}</h2><p data-live-subtitle>{{ old('subtitle', $s?->subtitle ?? 'Your subtitle appears here') }}</p><span data-live-button>{{ old('button_text', $s?->button_text ?? 'Shop now') }}</span></div>
+            <div class="preview-copy"><h2 data-live-title>{{ old('title', $s?->title ?? '') }}</h2><p data-live-subtitle>{{ old('subtitle', $s?->subtitle ?? '') }}</p><span data-live-button>{{ old('button_text', $s?->button_text ?? '') }}</span></div>
         </div>
     </aside>
 </div>

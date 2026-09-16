@@ -1,10 +1,12 @@
-# AMER Pack-015 v1.3 — Cloud Slider Image Fix
+# AMER Pack-015 v1.4 — Accurate Preview & No-Crop Slider
 
 Adds per-slide and per-video typography controls with live preview.
 
 Title and subtitle are optional for individual and multiple picture slides. You can create a slide using only a picture.
 
 Version 1.3 removes the forced AMER eyebrow from every slide and stores, reads, replaces and deletes slide media through the configured Laravel filesystem disk. This supports Laravel Cloud Object Storage while retaining the local public-disk fallback.
+
+Version 1.4 makes no-crop Contain mode the default, changes Live Preview to the real 1920×800 desktop ratio, applies fit and focal-position controls in real time, and hides empty preview placeholders.
 
 ## Included
 

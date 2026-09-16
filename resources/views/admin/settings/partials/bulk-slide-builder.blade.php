@@ -53,7 +53,7 @@
             <div class="admin-grid">
                 <label>Button Text<input data-field="button_texts"></label>
                 <label>Button URL<input data-field="button_urls"></label>
-                <label>Picture Fit<select data-field="fit_modes" data-bulk-fit><option value="cover">Auto Cover</option><option value="contain">Contain Full Picture</option><option value="original">Original Proportion</option></select></label>
+                <label>Picture Fit<select data-field="fit_modes" data-bulk-fit><option value="contain" selected>Contain Full Picture — No Crop</option><option value="cover">Auto Cover — Fill & Crop</option><option value="original">Original Proportion — No Enlargement</option></select></label>
                 <label>Horizontal Focus <output data-focal-x-output>50%</output><input type="range" min="0" max="100" value="50" data-field="focal_x" data-focal-x></label>
                 <label>Vertical Focus <output data-focal-y-output>50%</output><input type="range" min="0" max="100" value="50" data-field="focal_y" data-focal-y></label>
             </div>

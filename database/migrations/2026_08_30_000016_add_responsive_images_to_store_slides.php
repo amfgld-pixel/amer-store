@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('image_path_mobile')->nullable();
             $table->unsignedInteger('image_original_width')->nullable();
             $table->unsignedInteger('image_original_height')->nullable();
-            $table->string('image_fit', 12)->default('cover');
+            $table->string('image_fit', 12)->default('contain');
             $table->unsignedTinyInteger('image_focal_x')->default(50);
             $table->unsignedTinyInteger('image_focal_y')->default(50);
         });
