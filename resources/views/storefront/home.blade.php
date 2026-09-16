@@ -13,7 +13,7 @@
     @endif
 
     @if ($slides->isNotEmpty())
-        <section class="cms-slider" data-slider>
+        <section class="cms-slider" data-slider data-slider-interval="5000" aria-roledescription="carousel">
             @foreach ($slides as $index => $slide)
                 <article class="cms-slide {{ $index === 0 ? 'active' : '' }} slide-align-{{ $slide->text_alignment ?? 'left' }} slide-position-{{ $slide->text_position ?? 'middle' }} slide-shadow-{{ $slide->text_shadow ?? 'none' }}" data-slide style="--slide-title-font:'{{ $slide->title_font ?? 'Manrope' }}';--title-desktop:{{ $slide->title_size_desktop ?? 72 }}px;--title-tablet:{{ $slide->title_size_tablet ?? 52 }}px;--title-mobile:{{ $slide->title_size_mobile ?? 34 }}px;--subtitle-desktop:{{ $slide->subtitle_size_desktop ?? 20 }}px;--subtitle-tablet:{{ $slide->subtitle_size_tablet ?? 18 }}px;--subtitle-mobile:{{ $slide->subtitle_size_mobile ?? 15 }}px;--title-color:{{ $slide->title_color ?? '#161616' }};--subtitle-color:{{ $slide->subtitle_color ?? '#161616' }};--slide-weight:{{ $slide->font_weight ?? 400 }};--slide-line-height:{{ $slide->line_height ?? 1 }};--slide-letter-spacing:{{ $slide->letter_spacing ?? 0 }}px;--overlay-color:{{ $slide->overlay_color ?? '#FFFFFF' }};--overlay-opacity:{{ ($slide->overlay_opacity ?? 25) / 100 }};--button-font:'{{ $slide->button_font ?? 'Inter' }}';--button-size:{{ $slide->button_size ?? 16 }}px;--button-color:{{ $slide->button_text_color ?? '#FFFFFF' }};--button-bg:{{ $slide->button_background_color ?? '#161616' }}">
                     @if ($slide->image_path)
@@ -50,7 +50,7 @@
             @if ($slides->count() > 1)
                 <div class="slider-dots">
                     @foreach ($slides as $index => $slide)
-                        <button type="button" data-slide-to="{{ $index }}" aria-label="Slide {{ $index + 1 }}"></button>
+                        <button type="button" data-slide-to="{{ $index }}" aria-label="Show slide {{ $index + 1 }}" @if($index === 0) class="active" aria-current="true" @endif></button>
                     @endforeach
                 </div>
             @endif
@@ -106,12 +106,65 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const slides = [...document.querySelectorAll('[data-slide]')];
-            document.querySelectorAll('[data-slide-to]').forEach((button) => {
-                button.addEventListener('click', () => {
-                    slides.forEach((slide) => slide.classList.remove('active'));
-                    slides[Number(button.dataset.slideTo)]?.classList.add('active');
+            document.querySelectorAll('[data-slider]').forEach((slider) => {
+                const slides = [...slider.querySelectorAll('[data-slide]')];
+                const dots = [...slider.querySelectorAll('[data-slide-to]')];
+
+                if (slides.length < 2) {
+                    return;
+                }
+
+                const interval = Math.max(2000, Number(slider.dataset.sliderInterval) || 5000);
+                let current = Math.max(0, slides.findIndex((slide) => slide.classList.contains('active')));
+                let timer = null;
+
+                const show = (index) => {
+                    current = (index + slides.length) % slides.length;
+                    slides.forEach((slide, slideIndex) => {
+                        const active = slideIndex === current;
+                        slide.classList.toggle('active', active);
+                        slide.setAttribute('aria-hidden', active ? 'false' : 'true');
+                    });
+                    dots.forEach((dot, dotIndex) => {
+                        const active = dotIndex === current;
+                        dot.classList.toggle('active', active);
+                        if (active) {
+                            dot.setAttribute('aria-current', 'true');
+                        } else {
+                            dot.removeAttribute('aria-current');
+                        }
+                    });
+                };
+
+                const stop = () => {
+                    if (timer !== null) {
+                        window.clearInterval(timer);
+                        timer = null;
+                    }
+                };
+
+                const start = () => {
+                    stop();
+                    if (! document.hidden) {
+                        timer = window.setInterval(() => show(current + 1), interval);
+                    }
+                };
+
+                dots.forEach((button) => {
+                    button.addEventListener('click', () => {
+                        show(Number(button.dataset.slideTo));
+                        start();
+                    });
                 });
+
+                slider.addEventListener('mouseenter', stop);
+                slider.addEventListener('mouseleave', start);
+                slider.addEventListener('focusin', stop);
+                slider.addEventListener('focusout', start);
+                document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
+
+                show(current);
+                start();
             });
         });
     </script>
