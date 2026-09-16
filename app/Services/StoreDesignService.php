@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\StoreSetting;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
@@ -35,15 +36,26 @@ class StoreDesignService
     private function replaceFileSetting(string $key, UploadedFile $file): void
     {
         $setting = StoreSetting::query()->firstOrNew(['key' => $key]);
-        if ($setting->value) {
-            Storage::disk('public')->delete($setting->value);
+        if (is_string($setting->value) && trim($setting->value) !== '') {
+            $this->mediaDisk()->delete($setting->value);
         }
 
         $setting->fill([
-            'value' => $file->store('store/design', 'public'),
+            'value' => $file->store('store/design', $this->mediaDiskName()),
             'type' => 'file',
             'group' => 'design',
         ])->save();
     }
-}
 
+    private function mediaDisk(): Filesystem
+    {
+        return Storage::disk($this->mediaDiskName());
+    }
+
+    private function mediaDiskName(): string
+    {
+        $name = (string) config('filesystems.default', 'public');
+
+        return $name === 'local' ? 'public' : $name;
+    }
+}

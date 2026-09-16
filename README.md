@@ -1,4 +1,4 @@
-# AMER Pack-015 v1.5 — Automatic Slider Rotation
+# AMER Pack-015 v1.6 — Cloud Logo and Favicon Fix
 
 Adds per-slide and per-video typography controls with live preview.
 
@@ -9,6 +9,8 @@ Version 1.3 removes the forced AMER eyebrow from every slide and stores, reads, 
 Version 1.4 makes no-crop Contain mode the default, changes Live Preview to the real 1920×800 desktop ratio, applies fit and focal-position controls in real time, and hides empty preview placeholders.
 
 Version 1.5 automatically advances active slides every five seconds, loops back to the first slide, keeps navigation dots synchronized, pauses on hover/focus or when the browser tab is hidden, and restarts after manual navigation.
+
+Version 1.6 stores Logo and Favicon through the configured Laravel filesystem disk, displays their Laravel Cloud Object Storage URLs, and adds a cache version to the favicon URL. Files uploaded before this fix to temporary cloud-local storage must be uploaded again after deployment.
 
 ## Included
 

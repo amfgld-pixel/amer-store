@@ -1,4 +1,95 @@
-@php($storeSettings=\App\Models\StoreSetting::query()->pluck('value','key'))
+@php
+    $storeSettings = \App\Models\StoreSetting::query()->pluck('value', 'key');
+    $designDiskName = config('filesystems.default', 'public');
+    $designDiskName = $designDiskName === 'local' ? 'public' : $designDiskName;
+    $designDisk = \Illuminate\Support\Facades\Storage::disk($designDiskName);
+    $logoUrl = !empty($storeSettings['logo']) ? $designDisk->url($storeSettings['logo']) : null;
+    $faviconUrl = !empty($storeSettings['favicon']) ? $designDisk->url($storeSettings['favicon']) : null;
+    $faviconVersion = !empty($storeSettings['favicon']) ? substr(md5((string) $storeSettings['favicon']), 0, 12) : null;
+    $versionedFaviconUrl = $faviconUrl
+        ? $faviconUrl.(str_contains($faviconUrl, '?') ? '&' : '?').'v='.$faviconVersion
+        : null;
+@endphp
 <!doctype html>
-<html lang="{{ str_replace('_','-',app()->getLocale()) }}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>@yield('title',($storeSettings['store_name'] ?? 'AMER').' — Modern Essentials')</title><meta name="description" content="@yield('meta_description','Discover AMER clothing, accessories and toys.')"><meta name="theme-color" content="#ffffff">@if(!empty($storeSettings['favicon']))<link rel="icon" href="{{ asset('storage/'.$storeSettings['favicon']) }}">@endif<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="{{ asset('css/amer-storefront.css') }}"><link rel="stylesheet" href="{{ asset('css/amer-commerce.css') }}"><link rel="stylesheet" href="{{ asset('css/amer-pack-013.css') }}"><style>:root{--ink:{{ $storeSettings['primary_color'] ?? '#161616' }};--gold:{{ $storeSettings['accent_color'] ?? '#B69555' }}}</style>@stack('head')</head>
-<body><a class="skip" href="#main">Skip to content</a><div class="announcement">{{ $storeSettings['announcement'] ?? 'WORLDWIDE SHIPPING READY' }}</div><header class="site-header"><div class="header-inner"><button class="menu-toggle" type="button" aria-label="Open menu" data-menu>☰</button><a class="logo" href="{{ route('home') }}">@if(!empty($storeSettings['logo']))<img class="store-logo" src="{{ asset('storage/'.$storeSettings['logo']) }}" alt="{{ $storeSettings['store_name'] ?? 'AMER' }}">@else{{ $storeSettings['store_name'] ?? 'AMER' }}@endif</a><nav class="desktop-nav"><a href="{{ route('shop') }}">New In</a><a href="{{ route('collection.show','women') }}">Women</a><a href="{{ route('collection.show','men') }}">Men</a><a href="{{ route('collection.show','accessories') }}">Accessories</a><a href="{{ route('collection.show','toys') }}">Toys</a></nav><div class="header-actions"><button type="button" data-search>⌕</button>@auth<a href="{{ route('wishlist.index') }}">♡</a><a href="{{ route('customer.account') }}">Account</a>@else<a href="{{ route('login') }}">Sign in</a><a href="{{ route('register') }}">Sign up</a>@endauth<a href="{{ route('compare.index') }}">Compare</a><a href="{{ route('cart.index') }}">Bag <span class="bag-count">{{ collect(session('amer_cart',[]))->sum('quantity') }}</span></a></div></div><div class="mobile-drawer" data-drawer><a href="{{ route('shop') }}">New In</a><a href="{{ route('orders.track.form') }}">Track order</a>@auth<a href="{{ route('customer.account') }}">My account</a>@else<a href="{{ route('login') }}">Sign in</a><a href="{{ route('register') }}">Sign up</a>@endauth</div><form class="search-panel" action="{{ route('shop') }}" data-search-panel><input name="q" placeholder="Search AMER"><button>Search</button></form></header><main id="main">@if(session('status'))<div class="commerce-notice">{{ session('status') }}</div>@endif @if($errors->any())<div class="commerce-notice">{{ $errors->first() }}</div>@endif @yield('content')</main><footer class="footer"><div class="footer-main"><div><a class="logo" href="{{ route('home') }}">{{ $storeSettings['store_name'] ?? 'AMER' }}</a><p>{{ $storeSettings['footer_text'] ?? 'Modern essentials designed with clarity and confidence.' }}</p></div><div><h3>Shop</h3><a href="{{ route('shop') }}">New arrivals</a></div><div><h3>Client care</h3><a href="{{ route('orders.track.form') }}">Track order</a><a href="{{ route('customer.account') }}">Purchase history</a></div><div><h3>Account</h3>@auth<a href="{{ route('customer.account') }}">My account</a>@else<a href="{{ route('login') }}">Sign in</a><a href="{{ route('register') }}">Sign up</a>@endauth</div></div><div class="footer-bottom"><span>© {{ date('Y') }} {{ $storeSettings['store_name'] ?? 'AMER' }}</span><span>Bangladesh · Worldwide</span></div></footer><nav class="mobile-bottom"><a href="{{ route('home') }}">Home</a><a href="{{ route('shop') }}">Shop</a><a href="{{ route('cart.index') }}">Bag</a><a href="{{ auth()->check() ? route('customer.account') : route('login') }}">Account</a></nav><script src="{{ asset('js/amer-storefront.js') }}" defer></script>@stack('scripts')</body></html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>@yield('title', ($storeSettings['store_name'] ?? 'AMER').' — Modern Essentials')</title>
+    <meta name="description" content="@yield('meta_description', 'Discover AMER clothing, accessories and toys.')">
+    <meta name="theme-color" content="#ffffff">
+    @if($versionedFaviconUrl)
+        <link rel="icon" href="{{ $versionedFaviconUrl }}">
+        <link rel="shortcut icon" href="{{ $versionedFaviconUrl }}">
+        <link rel="apple-touch-icon" href="{{ $versionedFaviconUrl }}">
+    @endif
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/amer-storefront.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/amer-commerce.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/amer-pack-013.css') }}">
+    <style>:root{--ink:{{ $storeSettings['primary_color'] ?? '#161616' }};--gold:{{ $storeSettings['accent_color'] ?? '#B69555' }}}</style>
+    @stack('head')
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="announcement">{{ $storeSettings['announcement'] ?? 'WORLDWIDE SHIPPING READY' }}</div>
+<header class="site-header">
+    <div class="header-inner">
+        <button class="menu-toggle" type="button" aria-label="Open menu" data-menu>☰</button>
+        <a class="logo" href="{{ route('home') }}">
+            @if($logoUrl)
+                <img class="store-logo" src="{{ $logoUrl }}" alt="{{ $storeSettings['store_name'] ?? 'AMER' }}">
+            @else
+                {{ $storeSettings['store_name'] ?? 'AMER' }}
+            @endif
+        </a>
+        <nav class="desktop-nav">
+            <a href="{{ route('shop') }}">New In</a>
+            <a href="{{ route('collection.show', 'women') }}">Women</a>
+            <a href="{{ route('collection.show', 'men') }}">Men</a>
+            <a href="{{ route('collection.show', 'accessories') }}">Accessories</a>
+            <a href="{{ route('collection.show', 'toys') }}">Toys</a>
+        </nav>
+        <div class="header-actions">
+            <button type="button" data-search>⌕</button>
+            @auth
+                <a href="{{ route('wishlist.index') }}">♡</a>
+                <a href="{{ route('customer.account') }}">Account</a>
+            @else
+                <a href="{{ route('login') }}">Sign in</a>
+                <a href="{{ route('register') }}">Sign up</a>
+            @endauth
+            <a href="{{ route('compare.index') }}">Compare</a>
+            <a href="{{ route('cart.index') }}">Bag <span class="bag-count">{{ collect(session('amer_cart', []))->sum('quantity') }}</span></a>
+        </div>
+    </div>
+    <div class="mobile-drawer" data-drawer>
+        <a href="{{ route('shop') }}">New In</a>
+        <a href="{{ route('orders.track.form') }}">Track order</a>
+        @auth<a href="{{ route('customer.account') }}">My account</a>@else<a href="{{ route('login') }}">Sign in</a><a href="{{ route('register') }}">Sign up</a>@endauth
+    </div>
+    <form class="search-panel" action="{{ route('shop') }}" data-search-panel>
+        <input name="q" placeholder="Search AMER"><button>Search</button>
+    </form>
+</header>
+<main id="main">
+    @if(session('status'))<div class="commerce-notice">{{ session('status') }}</div>@endif
+    @if($errors->any())<div class="commerce-notice">{{ $errors->first() }}</div>@endif
+    @yield('content')
+</main>
+<footer class="footer">
+    <div class="footer-main">
+        <div><a class="logo" href="{{ route('home') }}">{{ $storeSettings['store_name'] ?? 'AMER' }}</a><p>{{ $storeSettings['footer_text'] ?? 'Modern essentials designed with clarity and confidence.' }}</p></div>
+        <div><h3>Shop</h3><a href="{{ route('shop') }}">New arrivals</a></div>
+        <div><h3>Client care</h3><a href="{{ route('orders.track.form') }}">Track order</a><a href="{{ route('customer.account') }}">Purchase history</a></div>
+        <div><h3>Account</h3>@auth<a href="{{ route('customer.account') }}">My account</a>@else<a href="{{ route('login') }}">Sign in</a>@endauth</div>
+    </div>
+    <div class="footer-bottom"><span>© {{ date('Y') }} {{ $storeSettings['store_name'] ?? 'AMER' }}</span><span>Bangladesh · Worldwide</span></div>
+</footer>
+<nav class="mobile-bottom"><a href="{{ route('home') }}">Home</a><a href="{{ route('shop') }}">Shop</a><a href="{{ route('cart.index') }}">Bag</a><a href="{{ auth()->check() ? route('customer.account') : route('login') }}">Account</a></nav>
+<script src="{{ asset('js/amer-storefront.js') }}" defer></script>
+@stack('scripts')
+</body>
+</html>
