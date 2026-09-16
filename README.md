@@ -1,8 +1,10 @@
-# AMER Pack-015 v1.2 — Optional Text & Multiple Picture Slider
+# AMER Pack-015 v1.3 — Cloud Slider Image Fix
 
 Adds per-slide and per-video typography controls with live preview.
 
 Title and subtitle are optional for individual and multiple picture slides. You can create a slide using only a picture.
+
+Version 1.3 removes the forced AMER eyebrow from every slide and stores, reads, replaces and deletes slide media through the configured Laravel filesystem disk. This supports Laravel Cloud Object Storage while retaining the local public-disk fallback.
 
 ## Included
 

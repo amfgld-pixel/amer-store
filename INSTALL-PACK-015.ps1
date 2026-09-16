@@ -71,4 +71,4 @@ if ($LASTEXITCODE -ne 0 -or $bulkRouteText -notmatch 'admin\.settings\.slides\.b
     throw 'Multiple picture slide route was not registered.'
 }
 
-Write-Host 'AMER Pack-015 v1.2 Optional Text and Multiple Picture Slider installed successfully.' -ForegroundColor Green
+Write-Host 'AMER Pack-015 v1.3 Cloud Slider Image Fix installed successfully.' -ForegroundColor Green

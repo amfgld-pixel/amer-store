@@ -32,4 +32,18 @@ class Pack015SlideTypographyTest extends TestCase
 
         $this->get('/')->assertOk()->assertSee('First Line<br />\nSecond Line', false);
     }
+
+    public function test_picture_only_slide_has_no_forced_amer_label(): void
+    {
+        StoreSlide::query()->create([
+            'title' => null,
+            'subtitle' => null,
+            'image_path' => 'store/slides/demo.webp',
+            'is_active' => true,
+        ]);
+
+        $this->get('/')
+            ->assertOk()
+            ->assertDontSee('<p class="eyebrow">AMER</p>', false);
+    }
 }

@@ -2,6 +2,12 @@
     $s = $slide ?? null;
     $fonts = ['Poppins', 'Inter', 'Playfair Display', 'Montserrat', 'Manrope', 'DM Sans'];
 @endphp
+@php
+    $slideDiskName = config('filesystems.default', 'public');
+    $slideDiskName = $slideDiskName === 'local' ? 'public' : $slideDiskName;
+    $existingImageUrl = $s?->image_path ? \Illuminate\Support\Facades\Storage::disk($slideDiskName)->url($s->image_path) : '';
+    $existingVideoUrl = $s?->video_path ? \Illuminate\Support\Facades\Storage::disk($slideDiskName)->url($s->video_path) : ($s?->video_url ?? '');
+@endphp
 <div class="slide-editor-grid">
     <section class="slide-controls">
         <h3>Content & media</h3>
@@ -56,7 +62,7 @@
 
     <aside class="slide-preview-wrap">
         <h3>Live Preview <small>(desktop preview)</small></h3>
-        <div class="slide-live-preview position-{{ old('text_position', $s?->text_position ?? 'middle') }}" data-slide-preview data-existing-image="{{ $s?->image_path ? asset('storage/'.$s->image_path) : '' }}" data-existing-video="{{ $s?->video_path ? asset('storage/'.$s->video_path) : ($s?->video_url ?? '') }}">
+        <div class="slide-live-preview position-{{ old('text_position', $s?->text_position ?? 'middle') }}" data-slide-preview data-existing-image="{{ $existingImageUrl }}" data-existing-video="{{ $existingVideoUrl }}">
             <div class="preview-media" data-preview-media></div><div class="preview-overlay" data-preview-overlay></div>
             <div class="preview-copy"><h2 data-live-title>{{ old('title', $s?->title ?? 'Your slide title') }}</h2><p data-live-subtitle>{{ old('subtitle', $s?->subtitle ?? 'Your subtitle appears here') }}</p><span data-live-button>{{ old('button_text', $s?->button_text ?? 'Shop now') }}</span></div>
         </div>

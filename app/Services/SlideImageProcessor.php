@@ -38,7 +38,7 @@ class SlideImageProcessor
                 $paths[$name] = $path;
             }
         } catch (\Throwable $exception) {
-            Storage::disk('public')->delete(array_values($paths));
+            $this->disk()->delete(array_values($paths));
             throw $exception;
         } finally {
             imagedestroy($source);
@@ -83,10 +83,17 @@ class SlideImageProcessor
         ob_start();
         $encoded = imagewebp($canvas, null, 86);
         $webp = ob_get_clean();
-        if (! $encoded || ! is_string($webp) || ! Storage::disk('public')->put($path, $webp)) {
+        if (! $encoded || ! is_string($webp) || ! $this->disk()->put($path, $webp)) {
             imagedestroy($canvas);
             throw new RuntimeException('Responsive WebP slide generation failed.');
         }
         imagedestroy($canvas);
+    }
+
+    private function disk(): \Illuminate\Contracts\Filesystem\Filesystem
+    {
+        $name = (string) config('filesystems.default', 'public');
+
+        return Storage::disk($name === 'local' ? 'public' : $name);
     }
 }

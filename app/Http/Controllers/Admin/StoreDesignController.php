@@ -81,7 +81,7 @@ class StoreDesignController extends Controller
                 }
             });
         } catch (\Throwable $exception) {
-            Storage::disk('public')->delete($createdPaths);
+            $this->mediaDisk()->delete($createdPaths);
             throw $exception;
         }
 
@@ -94,7 +94,7 @@ class StoreDesignController extends Controller
             $slide->image_path_mobile, $slide->video_path],
             static fn (mixed $path): bool => is_string($path) && trim($path) !== ''));
         if ($paths !== []) {
-            Storage::disk('public')->delete($paths);
+            $this->mediaDisk()->delete($paths);
         }
         $slide->delete();
 
@@ -112,15 +112,27 @@ class StoreDesignController extends Controller
                 (int) $data['image_focal_x'],
                 (int) $data['image_focal_y'],
             ));
-            Storage::disk('public')->delete($oldPaths);
+            $this->mediaDisk()->delete($oldPaths);
         }
         if ($request->hasFile('video')) {
             if ($slide?->video_path) {
-                Storage::disk('public')->delete($slide->video_path);
+                $this->mediaDisk()->delete($slide->video_path);
             }
-            $data['video_path'] = $request->file('video')->store('store/videos', 'public');
+            $data['video_path'] = $request->file('video')->store('store/videos', $this->mediaDiskName());
         }
 
         return $data;
+    }
+
+    private function mediaDisk(): \Illuminate\Contracts\Filesystem\Filesystem
+    {
+        return Storage::disk($this->mediaDiskName());
+    }
+
+    private function mediaDiskName(): string
+    {
+        $name = (string) config('filesystems.default', 'public');
+
+        return $name === 'local' ? 'public' : $name;
     }
 }
