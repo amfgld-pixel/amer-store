@@ -1,44 +1,28 @@
-# AMER Pack-015 v1.6 — Cloud Logo and Favicon Fix
+# AMER Pack-016 — Product Picture Gallery
 
-Adds per-slide and per-video typography controls with live preview.
-
-Title and subtitle are optional for individual and multiple picture slides. You can create a slide using only a picture.
-
-Version 1.3 removes the forced AMER eyebrow from every slide and stores, reads, replaces and deletes slide media through the configured Laravel filesystem disk. This supports Laravel Cloud Object Storage while retaining the local public-disk fallback.
-
-Version 1.4 makes no-crop Contain mode the default, changes Live Preview to the real 1920×800 desktop ratio, applies fit and focal-position controls in real time, and hides empty preview placeholders.
-
-Version 1.5 automatically advances active slides every five seconds, loops back to the first slide, keeps navigation dots synchronized, pauses on hover/focus or when the browser tab is hidden, and restarts after manual navigation.
-
-Version 1.6 stores Logo and Favicon through the configured Laravel filesystem disk, displays their Laravel Cloud Object Storage URLs, and adds a cache version to the favicon URL. Files uploaded before this fix to temporary cloud-local storage must be uploaded again after deployment.
+Adds the missing product picture management system to New/Edit Product.
 
 ## Included
 
-- Poppins, Inter, Playfair Display, Montserrat, Manrope and DM Sans
-- Separate desktop, tablet and mobile title/subtitle sizes
-- Colours, weights, alignment and vertical position
-- Line height, letter spacing, shadow and overlay
-- Safe multiline title/subtitle output
-- Button typography and colours
-- Edit controls for existing slides
-- Image/video live preview before saving
-- Null-safe slideshow deletion
-- Upload 2–20 pictures together with a different title/subtitle per picture
-- Automatic responsive WebP outputs: 1920×800, 1200×700 and 750×900
-- Cover, contain and original-proportion modes
-- Manual horizontal/vertical focal controls
-- Manual picture measurement calculator
-- Add pictures one by one without losing earlier selections
-- Remove any selected picture before creating the slides
+- One main product image
+- Up to ten gallery images per save
+- JPG, PNG and WebP support up to 10 MB per image
+- Preview selected pictures before saving
+- View existing pictures on Edit Product
+- Choose a different primary picture
+- Remove saved pictures
+- Laravel Cloud Object Storage support
+- Cloud image URLs on product cards and product details
+
+The existing `product_images` database table is used, so no new migration is required.
 
 ## Install
 
-Extract the ZIP, copy all extracted contents into the Laravel project root, replace files, then run:
+Copy all extracted files into the Laravel project root and replace the matching files. Then run:
 
 ```powershell
 cd "G:\Website build\amer-store"
-powershell -ExecutionPolicy Bypass -File .\INSTALL-PACK-015.ps1
-php artisan serve
+powershell -ExecutionPolicy Bypass -File .\INSTALL-PACK-016.ps1
 ```
 
-Open `http://127.0.0.1:8000/admin/settings/store-design`.
+For Laravel Cloud, commit the files, push to GitHub and deploy.
