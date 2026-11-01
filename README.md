@@ -1,4 +1,4 @@
-# AMER Toys to Kids Category Hotfix
+# AMER Toys to Kids Category Hotfix v1.1
 
 This update changes the existing `Toys` category to `Kids` without creating a duplicate category.
 
@@ -8,6 +8,7 @@ This update changes the existing `Toys` category to `Kids` without creating a du
 - `toys` slug becomes `kids`
 - Existing Toys-category products remain attached to Kids
 - Header and mobile navigation link to Kids
+- Kids appears immediately before Accessories in the header, mobile menu and Collections list
 - Men, Women and Accessories remain unchanged
 - Future catalog seeding creates Kids instead of Toys
 

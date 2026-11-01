@@ -49,8 +49,8 @@
             <a href="{{ route('shop') }}">New In</a>
             <a href="{{ route('collection.show', 'women') }}">Women</a>
             <a href="{{ route('collection.show', 'men') }}">Men</a>
-            <a href="{{ route('collection.show', 'accessories') }}">Accessories</a>
             <a href="{{ route('collection.show', 'kids') }}">Kids</a>
+            <a href="{{ route('collection.show', 'accessories') }}">Accessories</a>
         </nav>
         <div class="header-actions">
             <button type="button" data-search>⌕</button>
@@ -69,8 +69,8 @@
         <a href="{{ route('shop') }}">New In</a>
         <a href="{{ route('collection.show', 'women') }}">Women</a>
         <a href="{{ route('collection.show', 'men') }}">Men</a>
-        <a href="{{ route('collection.show', 'accessories') }}">Accessories</a>
         <a href="{{ route('collection.show', 'kids') }}">Kids</a>
+        <a href="{{ route('collection.show', 'accessories') }}">Accessories</a>
         <a href="{{ route('orders.track.form') }}">Track order</a>
         @auth<a href="{{ route('customer.account') }}">My account</a>@else<a href="{{ route('login') }}">Sign in</a><a href="{{ route('register') }}">Sign up</a>@endauth
     </div>
