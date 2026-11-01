@@ -15,7 +15,7 @@ class AmerCatalogSeeder extends Seeder
             Role::where('slug','super-admin')->first()?->permissions()->syncWithoutDetaching([$permission->id]);
         }
         Brand::firstOrCreate(['slug'=>'amer'],['name'=>'AMER','name_bn'=>'আমের','is_active'=>true]);
-        foreach ([['clothing','Clothing','পোশাক'],['men','Men','পুরুষ'],['women','Women','নারী'],['accessories','Accessories','এক্সেসরিজ'],['toys','Toys','খেলনা'],['new-arrivals','New Arrivals','নতুন পণ্য']] as $i=>$c) Category::firstOrCreate(['slug'=>$c[0]],['name'=>$c[1],'name_bn'=>$c[2],'sort_order'=>$i,'is_active'=>true]);
+        foreach ([['clothing','Clothing','পোশাক'],['men','Men','পুরুষ'],['women','Women','নারী'],['accessories','Accessories','এক্সেসরিজ'],['kids','Kids','শিশু'],['new-arrivals','New Arrivals','নতুন পণ্য']] as $i=>$c) Category::firstOrCreate(['slug'=>$c[0]],['name'=>$c[1],'name_bn'=>$c[2],'sort_order'=>$i,'is_active'=>true]);
         foreach ([['size','Size','সাইজ','button'],['color','Color','রং','color']] as $i=>$a) Attribute::firstOrCreate(['slug'=>$a[0]],['name'=>$a[1],'name_bn'=>$a[2],'display_type'=>$a[3],'sort_order'=>$i]);
     }
 }
