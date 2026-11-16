@@ -29,7 +29,11 @@ class ProductController extends Controller
 
         return view('admin.catalog.product-form', [
             'product' => new Product(),
-            'categories' => Category::orderBy('sort_order')->get(),
+            'categories' => Category::with('children')
+                ->whereNull('parent_id')
+                ->orderBy('sort_order')
+                ->orderBy('name')
+                ->get(),
             'brands' => Brand::orderBy('sort_order')->get(),
         ]);
     }
@@ -47,7 +51,11 @@ class ProductController extends Controller
 
         return view('admin.catalog.product-form', [
             'product' => $product->load('categories', 'variants', 'images'),
-            'categories' => Category::orderBy('sort_order')->get(),
+            'categories' => Category::with('children')
+                ->whereNull('parent_id')
+                ->orderBy('sort_order')
+                ->orderBy('name')
+                ->get(),
             'brands' => Brand::orderBy('sort_order')->get(),
         ]);
     }

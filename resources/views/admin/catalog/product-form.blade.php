@@ -21,7 +21,29 @@
         <label><span>Brand</span><select name="brand_id"><option value="">No brand</option>@foreach($brands as $brand)<option value="{{ $brand->id }}" @selected(old('brand_id', $product->brand_id) == $brand->id)>{{ $brand->name }}</option>@endforeach</select></label>
         <label><span>Type</span><select name="product_type"><option value="variable" @selected(old('product_type', $product->product_type ?: 'variable') === 'variable')>Variable</option><option value="simple" @selected(old('product_type', $product->product_type) === 'simple')>Simple</option></select></label>
         <label><span>Status</span><select name="status">@foreach(['draft','active','archived'] as $status)<option value="{{ $status }}" @selected(old('status', $product->status ?: 'draft') === $status)>{{ ucfirst($status) }}</option>@endforeach</select></label>
-        <label class="wide"><span>Categories</span><div class="checks">@foreach($categories as $category)<label><input type="checkbox" name="category_ids[]" value="{{ $category->id }}" @checked(in_array($category->id, old('category_ids', $product->categories->pluck('id')->all())))>{{ $category->name }}</label>@endforeach</div></label>
+        <div class="wide product-category-picker">
+            <span>Categories & Subcategories</span>
+            <p>Select the most specific subcategory. You may also select its main category when needed.</p>
+            <div class="category-choice-groups">
+                @php($selectedCategoryIds = old('category_ids', $product->categories->pluck('id')->all()))
+                @foreach($categories as $category)
+                    <fieldset class="category-choice-group">
+                        <legend>
+                            <label><input type="checkbox" name="category_ids[]" value="{{ $category->id }}" @checked(in_array($category->id, $selectedCategoryIds))> {{ $category->name }}</label>
+                        </legend>
+                        @if($category->children->isNotEmpty())
+                            <div class="subcategory-choices">
+                                @foreach($category->children as $child)
+                                    <label><input type="checkbox" name="category_ids[]" value="{{ $child->id }}" @checked(in_array($child->id, $selectedCategoryIds))> {{ $child->name }}</label>
+                                @endforeach
+                            </div>
+                        @else
+                            <small>No subcategories yet.</small>
+                        @endif
+                    </fieldset>
+                @endforeach
+            </div>
+        </div>
         <label class="wide"><span>Short description</span><textarea name="short_description">{{ old('short_description', $product->short_description) }}</textarea></label>
         <label class="wide"><span>Description</span><textarea name="description">{{ old('description', $product->description) }}</textarea></label>
     </div>
@@ -82,7 +104,7 @@
 </form>
 
 <style>
-.product-media-editor{margin:32px 0;padding:24px;border:1px solid #e7dfd3;border-radius:18px;background:#fff}.media-heading{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:18px}.media-heading h2{margin:2px 0}.media-heading p{color:#716b62}.media-upload-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.upload-box{display:flex!important;flex-direction:column;gap:8px;padding:20px;border:1px dashed #b89a61;border-radius:14px;background:#fcfaf6}.upload-box input{margin-top:8px}.new-image-preview,.saved-image-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px;margin-top:18px}.preview-tile,.saved-image{position:relative;border:1px solid #e7dfd3;border-radius:12px;padding:8px;overflow:hidden;background:white}.preview-tile img,.saved-image img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:8px}.preview-tile small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:6px 2px 0}.saved-image label{display:block;margin-top:7px}.remove-choice{color:#b42318}@media(max-width:760px){.media-upload-grid{grid-template-columns:1fr}.media-heading{display:block}}
+.product-category-picker>span{display:block;margin-bottom:5px}.product-category-picker>p{color:#716b62;margin:0 0 12px}.category-choice-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.category-choice-group{border:1px solid #e7dfd3;border-radius:12px;padding:12px;background:#fcfaf6}.category-choice-group legend{padding:0 5px;font-weight:700}.subcategory-choices{display:grid;gap:8px;padding:6px 4px 2px 18px}.category-choice-group small{color:#81786d;padding-left:18px}.product-media-editor{margin:32px 0;padding:24px;border:1px solid #e7dfd3;border-radius:18px;background:#fff}.media-heading{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:18px}.media-heading h2{margin:2px 0}.media-heading p{color:#716b62}.media-upload-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.upload-box{display:flex!important;flex-direction:column;gap:8px;padding:20px;border:1px dashed #b89a61;border-radius:14px;background:#fcfaf6}.upload-box input{margin-top:8px}.new-image-preview,.saved-image-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px;margin-top:18px}.preview-tile,.saved-image{position:relative;border:1px solid #e7dfd3;border-radius:12px;padding:8px;overflow:hidden;background:white}.preview-tile img,.saved-image img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:8px}.preview-tile small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:6px 2px 0}.saved-image label{display:block;margin-top:7px}.remove-choice{color:#b42318}@media(max-width:760px){.media-upload-grid{grid-template-columns:1fr}.media-heading{display:block}}
 </style>
 
 <script>

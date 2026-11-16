@@ -22,7 +22,7 @@ class StorefrontController extends Controller
                 ?? $settings->get('announcement_text')
                 ?? $settings->get('promotion_banner_text'),
             'slides' => StoreSlide::where('is_active', true)->orderBy('sort_order')->get(),
-            'categories' => Category::where('is_active', true)->orderBy('sort_order')->limit(6)->get(),
+            'categories' => Category::whereNull('parent_id')->where('is_active', true)->orderBy('sort_order')->limit(6)->get(),
             'newArrivals' => Product::with(['brand', 'images', 'variants'])->where('status', 'active')->latest('id')->limit(8)->get(),
             'featured' => Product::with(['brand', 'images', 'variants'])->where('status', 'active')->where('is_featured', true)->orderBy('sort_order')->limit(8)->get(),
         ]);
@@ -31,14 +31,29 @@ class StorefrontController extends Controller
     public function shop(Request $request, ?Category $category = null)
     {
         $query = Product::with(['brand', 'images', 'variants', 'categories'])->where('status', 'active');
-        if ($category) $query->whereHas('categories', fn ($q) => $q->whereKey($category->id));
+        if ($category) {
+            $categoryIds = $category->children()
+                ->where('is_active', true)
+                ->pluck('id')
+                ->prepend($category->id);
+
+            $query->whereHas('categories', fn ($q) => $q->whereIn('categories.id', $categoryIds));
+        }
         if ($search = trim((string) $request->query('q'))) {
             $query->where(fn ($q) => $q->where('name', 'like', "%{$search}%")->orWhere('name_bn', 'like', "%{$search}%"));
         }
 
         return view('storefront.shop', [
             'company' => Company::where('is_active', true)->first(),
-            'categories' => Category::where('is_active', true)->orderBy('sort_order')->get(),
+            'categories' => Category::with(['children' => fn ($query) => $query
+                ->where('is_active', true)
+                ->orderBy('sort_order')
+                ->orderBy('name')])
+                ->whereNull('parent_id')
+                ->where('is_active', true)
+                ->orderBy('sort_order')
+                ->orderBy('name')
+                ->get(),
             'currentCategory' => $category,
             'products' => $query->orderBy('sort_order')->paginate(24)->withQueryString(),
         ]);
