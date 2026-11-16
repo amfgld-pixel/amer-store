@@ -22,7 +22,7 @@ class BrandController extends Controller
     {
         $data = $request->safe()->except('logo');
         if ($request->hasFile('logo')) {
-            $data['logo_path'] = $request->file('logo')->store('brands', 'public');
+            $data['logo_path'] = $request->file('logo')->store('brands');
         }
         Brand::query()->create($data);
 
@@ -33,8 +33,8 @@ class BrandController extends Controller
     {
         $data = $request->safe()->except('logo');
         if ($request->hasFile('logo')) {
-            Storage::disk('public')->delete($brand->logo_path);
-            $data['logo_path'] = $request->file('logo')->store('brands', 'public');
+            Storage::delete($brand->logo_path);
+            $data['logo_path'] = $request->file('logo')->store('brands');
         }
         $brand->update($data);
 
